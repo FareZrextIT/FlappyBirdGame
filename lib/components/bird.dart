@@ -64,6 +64,10 @@ class Bird extends SpriteComponent with CollisionCallbacks{
     if (other is Ground){
       (parent as FlappyBirdGame).gameOver();
     }
+
+    if (other is Pipe){
+      (parent as FlappyBirdGame).gameOver();
+    }
   }
 
   

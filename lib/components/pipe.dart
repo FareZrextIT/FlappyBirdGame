@@ -9,6 +9,8 @@ class Pipe extends SpriteComponent with CollisionCallbacks,  HasGameRef<FlappyBi
 
   final bool isTopPipe;
 
+  bool scored = false;
+
   Pipe(Vector2 position,Vector2 size,{required this.isTopPipe})
   : super(position: position, size: size);
 
@@ -25,6 +27,15 @@ class Pipe extends SpriteComponent with CollisionCallbacks,  HasGameRef<FlappyBi
   @override
   void update(double dt) {
     position.x -= groundScrollingSpeed * dt;
+
+    if(!scored && position.x + size.x < gameRef.bird.position.x){
+      scored = true;
+
+      if(isTopPipe){
+        gameRef.incrementScore();
+      }
+    }
+ 
 
 
     if(position.x + size.x <= 0 ){
