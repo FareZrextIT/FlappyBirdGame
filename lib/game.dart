@@ -1,128 +1,61 @@
-import 'dart:async';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
-import 'components/bird.dart';
-import 'components/background.dart';
-import 'components/ground.dart';
+import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'components/pipe_manager.dart';
+import 'components/score.dart';
+import 'components/bird.dart'; // Import Bird klase
 
-class FlappyBirdGame extends FlameGame with TapDetector,HasCollisionDetection {
+class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
+  late ScoreText scoreText;
+  late double screenHeight;
+  late double pipeGap;
+  late double minPipeHeight;
+  late double maxPipeHeight;
+  late double birdStartX;
+  late double birdStartY;
 
-  
+  late Bird _bird; // Privatna instanca ptice
+  int score = 0;
 
-/*
+  // Konstruktor za inicijalizaciju varijabli
+  FlappyBirdGame() {
+    screenHeight = 800;
+    pipeGap = 100;
+    minPipeHeight = 50;
+    maxPipeHeight = 300;
+    birdStartX = 100;
+    birdStartY = 200;
+  }
 
-Osnovne Komponente Igre
--ptica
--pozadina
--tlo
--cijevi
--rezultat
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
 
+    // Inicijalizacija ptice
+    _bird = Bird(position: Vector2(birdStartX, birdStartY));
+    add(_bird);
 
-*/
-
-late Bird bird;
-late Background background;
-late Ground ground;
-late PipeManager pipeManager;
-late ScoreText scoreText;
-
-/*
-
-LOAD
-
-*/
-
-@override
-  FutureOr<void> onLoad() {
-    
-    
-    // ucitaj pozadinu
-    background = Background(size);
-    add(background);
-
-    // ucitaj pticu
-    bird = Bird();
-    add(bird);
-    
-    // ucitaj tlo
-    ground = Ground();
-    add(ground);
-   // ucitaj cijevi
-    pipeManager = PipeManager();
-    add(pipeManager);
-
-    // ucitaj score
+    // Inicijalizacija ScoreText
     scoreText = ScoreText();
     add(scoreText);
 
-
-  }
-
-  /*
-
-  TAP
-
-  */
-
-
-  @override
-  void onTap() {
-    bird.flop();
-
-  }
-
-  int score = 0;
-
-  void incrementScore(){
-    score += 1;
-  }
-
-
-
-  bool isGameOver = false;
-
-  void gameOver() {
-    if(isGameOver) return;
-
-    isGameOver = true;
-    pauseEngine();
-
-    showDialog(
-      context: buildContext,
-       builder: (context) => AlertDialog(
-        title: const Text("Game Over"),
-        content: Text("High Score: $score"),
-        actions: [
-          TextButton(
-            onPressed: (){
-              Navigator.pop(context);
-
-              resetGame();
-            },
-
-          )
-        ],
-       )
+    // Inicijalizacija PipeManager
+    final pipeManager = PipeManager(
+      screenHeight: screenHeight,
+      pipeGap: pipeGap,
+      minPipeHeight: minPipeHeight,
+      maxPipeHeight: maxPipeHeight,
     );
-
-  }
-  void resetGame(){
-    bird.position = Vector2(birdStartX, birdStartY);
-    bird.velocity = 0;
-    score = 0;
-    isGameOver = false;
-    children.whereType<Pipe>().forEach(action: (Object? pipe)=> pipe.removeFromParent());
-    resumeEngine();
+    add(pipeManager);
   }
 
+  // Getter za bird kako bi bio dostupan u Pipe klasi
+  Bird get bird => _bird;
 
-
-
-
-
-  
-  
+  // Funkcija za povećanje rezultata
+  void incrementScore() {
+    score += 1;
+    scoreText.updateScore(score); // Ažuriraj prikaz skor teksta
+    print("Score: $score");
+  }
 }

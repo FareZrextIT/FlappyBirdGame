@@ -1,52 +1,26 @@
 import 'package:flame/components.dart';
-import 'package:flappybirdgame/game.dart';
+import 'dart:math'; // Dodano za Random()
+import '../game.dart';
+ // Osiguraj da postoji Pipe klasa
 
-class PipeManager extends Component with HasGameRef<FlappyBirdGame>{
+class PipeManager extends Component with HasGameRef<FlappyBirdGame> {
+  final double screenHeight;
+  final double pipeGap;
+  final double minPipeHeight;
+  final double maxPipeHeight;
 
-  double pipeSpawnTimer = 0;
-
-  @override
-  void update(double dt) {
-    
-    pipeSpawnTimer += dt;
-    const double pipeInterval = 2;
-
-    if(pipeSpawnTimer > pipeInterval ){
-      pipeSpawnTimer = 0;
-      spawnPipe();
-
-    }
-  }
+  PipeManager({
+    required this.screenHeight,
+    required this.pipeGap,
+    required this.minPipeHeight,
+    required this.maxPipeHeight,
+  });
 
   void spawnPipe() {
-    final double screenHeight = gameRef.size.y;
-    
+    final  = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
 
-
-    final double maxPipeHeight =
-        screenHeight - groundHeight - pipeGap - minPipeHeight;
-
-    final double bottomPipeHeight = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
-
-  // height of top pipe
-  final double topPipeHeight =
-      screenHeight - groundHeight - bottomPipeHeight - pipeGap;
-
-      final bottomPipe = Pipe{
-        Vector2(gameRef.size.x, screenHeight - groundHeight - bottomPipeHeight),
-        Vector2(pipeWidth,bottomPipeHeight),
-        isTopPipe: false,
-      };
-
-      final topPipe = Pipe(
-        Vector2(gameRef.size.x,0), 
-        Vector2(pipeWidth,topPipeHeight),
-        isTopPipe: true,
-        );
-
-        gameRef.add(bottomPipe);
-        gameRef.add(topPipe);
-
-
+    // Dodaj logiku za kreiranje cijevi (ako je potrebno)
+    // final pipe = Pipe(height: bottomPipeHeight);
+    // add(pipe);
   }
 }
