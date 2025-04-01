@@ -17,10 +17,9 @@ class PipeManager extends Component with HasGameRef<FlappyBirdGame> {
   });
 
   void spawnPipe() {
-    final  = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
+  final pipeHeight = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
+  // Use pipeHeight here to spawn the pipe
+  print("Generated pipe height: $pipeHeight");
+}
 
-    // Dodaj logiku za kreiranje cijevi (ako je potrebno)
-    // final pipe = Pipe(height: bottomPipeHeight);
-    // add(pipe);
-  }
 }

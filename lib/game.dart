@@ -1,5 +1,4 @@
 import 'package:flame/game.dart';
-import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'components/pipe_manager.dart';
 import 'components/score.dart';
@@ -27,20 +26,19 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
     birdStartY = 200;
   }
 
+  late final PipeManager pipeManager;
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    // Inicijalizacija ptice
-    _bird = Bird(position: Vector2(birdStartX, birdStartY));
-    add(_bird);
-
-    // Inicijalizacija ScoreText
     scoreText = ScoreText();
     add(scoreText);
 
-    // Inicijalizacija PipeManager
-    final pipeManager = PipeManager(
+    _bird = Bird()..position = Vector2(birdStartX, birdStartY);
+    add(_bird);
+
+    pipeManager = PipeManager(
       screenHeight: screenHeight,
       pipeGap: pipeGap,
       minPipeHeight: minPipeHeight,
@@ -54,8 +52,10 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
 
   // Funkcija za povećanje rezultata
   void incrementScore() {
-    score += 1;
-    scoreText.updateScore(score); // Ažuriraj prikaz skor teksta
-    print("Score: $score");
-  }
+  score += 1;
+  // Ažuriraj prikaz skor teksta
+  scoreText.text = "Score: $score";
+  print("Score: $score");
+}
+
 }

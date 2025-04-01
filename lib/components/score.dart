@@ -15,6 +15,8 @@ class ScoreText extends TextComponent with HasGameRef<FlappyBirdGame> {
     ),
   );
 
+  
+
   @override
   Future<void> onLoad() async {
     await super.onLoad(); // Poziv nadklasne metode
